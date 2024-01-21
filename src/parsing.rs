@@ -41,6 +41,47 @@ fn to_document(data: (String, u64, String, String)) -> LibraryItem {
     LibraryItem::Document(Document::new(name, url, size, DownloadType::Http))
 }
 
+fn kiwix_software_category() -> LibraryItem {
+    let mut items: Vec<LibraryItem> = Vec::new();
+
+    items.push(to_document((
+        "".into(),
+        132_781_178,
+        "Kiwix Desktop (Windows)".into(),
+        "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_windows_x64.zip".into(),
+    )));
+
+    items.push(to_document((
+        "".into(),
+        12_194_938,
+        "Kiwix Tools (Windows)".into(),
+        "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_win-i686.zip".into(),
+    )));
+
+    items.push(to_document((
+        "".into(),
+        79_691_776,
+        "Kiwix (Android)".into(),
+        "https://download.kiwix.org/release/kiwix-android/kiwix-3.9.1.apk".into(),
+    )));
+
+    items.push(to_document((
+        "".into(),
+        153_752_698,
+        "Kiwix (Linux Appimage)".into(),
+        "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_x86_64.appimage".into(),
+    )));
+
+    items.push(to_document((
+        "".into(),
+        19_597_885,
+        "Kiwix Tools (Linux ARM)".into(),
+        "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-armhf.tar.gz".into(),
+    )));
+
+    LibraryItem::Category(Category::new("Kiwix Software".into(), items, false))
+}
+
 pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) -> Vec<LibraryItem> {
     let mut map: HashMap<String, Vec<(String, u64, String, String)>> = HashMap::new();
 
@@ -140,6 +181,7 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
     root_kiwix.add(LibraryItem::Category(wikipedia));
     root_kiwix.add(LibraryItem::Category(stack_exchange));
     root_kiwix.add(LibraryItem::Category(avanti));
+    root_kiwix.add(kiwix_software_category());
 
     let root_kiwix = LibraryItem::Category(root_kiwix);
     let root_linux = LibraryItem::Category(root_linux);
