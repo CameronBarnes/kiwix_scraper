@@ -1,7 +1,7 @@
 use std::process::Command;
 
 use once_cell::sync::Lazy;
-use parsing::{get_page_from_path, parse_page};
+use parsing::{get_page_from_path, parse_page, parse_items_into_categories};
 
 mod parsing;
 mod types;
