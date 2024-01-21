@@ -93,6 +93,9 @@ impl Category {
         match item {
             LibraryItem::Document(_) => self.items.push(item),
             LibraryItem::Category(category) => {
+                if category.items.is_empty() {
+                    return;
+                }
                 if let Some(merge) = self.items.iter_mut().find_map(|e| match e {
                     LibraryItem::Document(_) => None,
                     LibraryItem::Category(cat) => {

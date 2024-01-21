@@ -49,7 +49,7 @@ fn main() {
                 let cat = Category::new(key, value.into_iter().map(to_document).collect(), true);
                 wikipedia.add(LibraryItem::Category(cat));
             }
-            "ted" | "keylearning" | "scienceinthebath" => {
+            "ted" | "keylearning" | "scienceinthebath" | "aimhi" => {
                 let cat = Category::new(key, value.into_iter().map(to_document).collect(), false);
                 root_kiwix.add(LibraryItem::Category(cat));
             }
@@ -70,6 +70,15 @@ fn main() {
                     true,
                 );
                 let arch = Category::new("Arch".into(), vec![LibraryItem::Category(cat)], false);
+                root_linux.add(LibraryItem::Category(arch));
+            },
+            "alpinelinux" => {
+                let cat = Category::new(
+                    key.add(" (wiki)"),
+                    value.into_iter().map(to_document).collect(),
+                    true,
+                );
+                let arch = Category::new("Alpine".into(), vec![LibraryItem::Category(cat)], false);
                 root_linux.add(LibraryItem::Category(arch));
             }
             _ => {
