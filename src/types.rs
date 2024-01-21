@@ -1,3 +1,5 @@
+use std::cmp::Reverse;
+
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]
@@ -32,6 +34,29 @@ impl LibraryItem {
         match self {
             LibraryItem::Document(doc) => doc.can_download(),
             LibraryItem::Category(cat) => cat.can_download(),
+        }
+    }
+
+    pub fn size(&self, enabled_only: bool) -> u64 {
+        match self {
+            LibraryItem::Document(doc) => {
+                if enabled_only {
+                    if doc.enabled {
+                        doc.size
+                    } else {
+                        0
+                    }
+                } else {
+                    doc.size
+                }
+            }
+            LibraryItem::Category(cat) => {
+                if enabled_only {
+                    cat.size(true)
+                } else {
+                    cat.size(false)
+                }
+            }
         }
     }
 
@@ -76,6 +101,13 @@ pub struct Category {
 
 impl Category {
     pub fn new(name: String, mut items: Vec<LibraryItem>, single_selection: bool) -> Self {
+        items.sort_unstable_by_key(|item| {
+                    let size = match item {
+                        LibraryItem::Document(doc) => doc.size,
+                        LibraryItem::Category(cat) => cat.size(true),
+                    };
+                    Reverse(size)
+                });
         if single_selection { // Only one option can be enabled at a time with single selection
             (1..items.len()).for_each(|i| {
                 items[i].set_enabled(false);
@@ -115,6 +147,10 @@ impl Category {
                 }
             }
         }
+    }
+
+    pub fn size(&self, enabled_only: bool) -> u64 {
+        self.items.iter().map(|item| item.size(enabled_only)).sum()
     }
 
 }
