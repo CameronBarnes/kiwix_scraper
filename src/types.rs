@@ -89,4 +89,29 @@ impl Category {
         self.items.iter().any(|item| item.can_download())
     }
 
+        pub fn add(&mut self, item: LibraryItem) {
+        match item {
+            LibraryItem::Document(_) => self.items.push(item),
+            LibraryItem::Category(category) => {
+                if let Some(merge) = self.items.iter_mut().find_map(|e| match e {
+                    LibraryItem::Document(_) => None,
+                    LibraryItem::Category(cat) => {
+                        if cat.name.eq_ignore_ascii_case(&category.name) {
+                            Some(cat)
+                        } else {
+                            None
+                        }
+                    }
+                }) {
+                    // End of condition, merge the two categories if their names match
+                    for item in category.items {
+                        merge.add(item);
+                    }
+                } else {
+                    self.items.push(LibraryItem::Category(category));
+                }
+            }
+        }
+    }
+
 }

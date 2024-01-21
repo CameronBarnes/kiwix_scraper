@@ -8,6 +8,8 @@ pub fn parse_page(input: &str) -> Vec<(String, u64, String, String)> {
 
     RE.captures_iter(input).map(|e| e.extract()).map(|(_, [category, size, doc_name, url])| {
 
+        let category = category.strip_suffix(" (English)").unwrap();
+
         let (size, unit) = size.split_once(' ').unwrap();
         let mut size: f64 = size.parse().unwrap();
         if unit.eq_ignore_ascii_case("kb") {
