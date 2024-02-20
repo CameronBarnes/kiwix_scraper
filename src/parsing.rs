@@ -94,6 +94,7 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
     }
 
     let mut root_kiwix = Category::new("Wiki".into(), vec![], false);
+    let mut root_media = Category::new("Media".into(), vec![], false);
     let mut wikipedia = Category::new("Wikipedia".into(), vec![], false);
     let mut stack_exchange = Category::new("Stack Exchange".into(), vec![], false);
     let mut avanti = Category::new("Avanti".into(), vec![], false);
@@ -108,7 +109,7 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
             }
             "ted" | "keylearning" | "scienceinthebath" | "aimhi" => {
                 let cat = Category::new(key, value.into_iter().map(to_document).collect(), false);
-                root_kiwix.add(LibraryItem::Category(cat));
+                root_media.add(LibraryItem::Category(cat));
             }
             "installgentoo" | "gentoo" => {
                 let cat = Category::new(
@@ -151,9 +152,9 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
                         || cat_name.eq_ignore_ascii_case("tedmed")
                     {
                         let cat = Category::new("ted".into(), vec![doc], false);
-                        root_kiwix.add(LibraryItem::Category(cat));
+                        root_media.add(LibraryItem::Category(cat));
                     } else {
-                        root_kiwix.add(doc);
+                        root_media.add(doc);
                     }
                 } else {
                     let cat = Category::new(
@@ -170,18 +171,19 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
                         || key.eq_ignore_ascii_case("tedmed")
                     {
                         let cat = Category::new("ted".into(), vec![cat], false);
-                        root_kiwix.add(LibraryItem::Category(cat));
+                        root_media.add(LibraryItem::Category(cat));
                     } else {
-                        root_kiwix.add(cat);
+                        root_media.add(cat);
                     }
                 }
             }
         }
     }
 
-    root_kiwix.add(LibraryItem::Category(wikipedia));
-    root_kiwix.add(LibraryItem::Category(stack_exchange));
-    root_kiwix.add(LibraryItem::Category(avanti));
+    root_media.add(LibraryItem::Category(wikipedia));
+    root_media.add(LibraryItem::Category(stack_exchange));
+    root_media.add(LibraryItem::Category(avanti));
+    root_kiwix.add(LibraryItem::Category(root_media));
     root_kiwix.add(kiwix_software_category());
 
     let root_kiwix = LibraryItem::Category(root_kiwix);
