@@ -83,6 +83,7 @@ fn kiwix_software_category() -> LibraryItem {
     LibraryItem::Category(Category::new("Kiwix Software".into(), items, false))
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) -> Vec<LibraryItem> {
     let mut map: HashMap<String, Vec<(String, u64, String, String)>> = HashMap::new();
 
@@ -98,6 +99,7 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
     let mut wikipedia = Category::new("Wikipedia".into(), vec![], false);
     let mut stack_exchange = Category::new("Stack Exchange".into(), vec![], false);
     let mut avanti = Category::new("Avanti".into(), vec![], false);
+    let mut zimgit = Category::new("zimgit".into(), vec![], false);
     let mut root_linux = Category::new("Linux".into(), vec![], false);
 
     for (key, value) in map {
@@ -107,7 +109,7 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
                 let cat = Category::new(key, value.into_iter().map(to_document).collect(), true);
                 wikipedia.add(LibraryItem::Category(cat));
             }
-            "ted" | "keylearning" | "scienceinthebath" | "aimhi" => {
+            "ted" | "keylearning" | "scienceinthebath" | "aimhi" | "zimgit" => {
                 let cat = Category::new(key, value.into_iter().map(to_document).collect(), false);
                 root_media.add(LibraryItem::Category(cat));
             }
@@ -144,7 +146,9 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
                     let (cat_name, size, _name, url) = &value[0];
                     let doc = Document::new(key, url.to_owned(), *size, DownloadType::Http);
                     let doc = LibraryItem::Document(doc);
-                    if cat_name.ends_with("stackexchange.com") {
+                    if cat_name.starts_with("zimgit") {
+                        zimgit.add(doc);
+                    } else if cat_name.ends_with("stackexchange.com") {
                         stack_exchange.add(doc);
                     } else if cat_name.starts_with("avanti") {
                         avanti.add(doc);
@@ -163,7 +167,9 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
                         true,
                     );
                     let cat = LibraryItem::Category(cat);
-                    if key.ends_with("stackexchange.com") {
+                    if key.starts_with("zimgit") {
+                        zimgit.add(cat);
+                    } else if key.ends_with("stackexchange.com") {
                         stack_exchange.add(cat);
                     } else if key.starts_with("avanti") {
                         avanti.add(cat);
@@ -183,6 +189,8 @@ pub fn parse_items_into_categories(items: Vec<(String, u64, String, String)>) ->
     root_media.add(LibraryItem::Category(wikipedia));
     root_media.add(LibraryItem::Category(stack_exchange));
     root_media.add(LibraryItem::Category(avanti));
+    root_media.add(LibraryItem::Category(zimgit));
+
     root_kiwix.add(LibraryItem::Category(root_media));
     root_kiwix.add(kiwix_software_category());
 
