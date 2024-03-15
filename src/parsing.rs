@@ -43,42 +43,38 @@ fn to_document(data: (String, u64, String, String)) -> LibraryItem {
 }
 
 fn kiwix_software_category() -> LibraryItem {
-    let mut items: Vec<LibraryItem> = Vec::new();
-
-    items.push(to_document((
-        String::new(),
-        132_781_178,
-        "Kiwix Desktop (Windows)".into(),
-        "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_windows_x64.zip".into(),
-    )));
-
-    items.push(to_document((
-        String::new(),
-        12_194_938,
-        "Kiwix Tools (Windows)".into(),
-        "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_win-i686.zip".into(),
-    )));
-
-    items.push(to_document((
-        String::new(),
-        79_691_776,
-        "Kiwix (Android)".into(),
-        "https://download.kiwix.org/release/kiwix-android/kiwix-3.9.1.apk".into(),
-    )));
-
-    items.push(to_document((
-        String::new(),
-        153_752_698,
-        "Kiwix (Linux Appimage)".into(),
-        "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_x86_64.appimage".into(),
-    )));
-
-    items.push(to_document((
-        String::new(),
-        19_597_885,
-        "Kiwix Tools (Linux ARM)".into(),
-        "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-armhf.tar.gz".into(),
-    )));
+    let items = vec![
+        to_document((
+                String::new(),
+                132_781_178,
+                "Kiwix Desktop (Windows)".into(),
+                "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_windows_x64.zip".into(),
+        )),
+        to_document((
+                String::new(),
+                12_194_938,
+                "Kiwix Tools (Windows)".into(),
+                "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_win-i686.zip".into(),
+        )),
+        to_document((
+                String::new(),
+                79_691_776,
+                "Kiwix (Android)".into(),
+                "https://download.kiwix.org/release/kiwix-android/kiwix-3.9.1.apk".into(),
+        )),
+        to_document((
+                String::new(),
+                153_752_698,
+                "Kiwix (Linux Appimage)".into(),
+                "https://download.kiwix.org/release/kiwix-desktop/kiwix-desktop_x86_64.appimage".into(),
+        )),
+        to_document((
+                String::new(),
+                19_597_885,
+                "Kiwix Tools (Linux ARM)".into(),
+                "https://download.kiwix.org/release/kiwix-tools/kiwix-tools_linux-armhf.tar.gz".into(),
+        )),
+    ];
 
     LibraryItem::Category(Category::new("Kiwix Software".into(), items, false))
 }
